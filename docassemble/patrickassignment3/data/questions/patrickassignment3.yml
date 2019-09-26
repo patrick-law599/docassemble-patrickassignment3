@@ -1,0 +1,85 @@
+---
+Objects:
+  - user: Individual
+  - household: DAList.using(object_type=Individual)
+---
+Question: |
+  What's your name?
+Fields:
+  - First: user.name.first
+  - Last: user.name.last
+Mandatory: true
+---
+Question: |
+  Are you eligible for Legal Aid?
+yesno: eligible
+---
+Question: |
+  Have you been here before (choose one):
+Field: client_before
+Choices:
+  - Yes
+  - No
+  - "I don't know."
+Mandatory: true
+---
+Question: |
+  Why are you here today?
+Fields:
+  - "Select all that apply": today_problem
+    datatype: checkboxes
+    choices:
+      - I have a problem with my landlord.
+      - I want to get a divorce.
+      - I got fired because of discrimination.
+      - I have a custody problem.
+      - I want my MTV.
+Mandatory: true
+---
+generic object: Individual
+question: |
+  ${ user }, do you live with another person?
+yesno: household.there_are_any
+Mandatory: true
+---
+question: |
+  Tell us the name of the ${ ordinal(i) } person. 
+fields:
+  - First name: household[i].name.first
+  - Last name: household[i].name.last
+---
+question: |
+  So far you have told us about ${ len(household) } people.
+  Are there more people?
+yesno: household.there_is_another
+mandatory: true
+---
+mandatory: true
+question: |
+  Your household is ${household}
+yesno: nextscreen
+---
+Question: Here is your document.
+attachment:
+   name: Advice Memo
+   filename: test.md
+   content file: patrickassignment3.md
+Mandatory: true
+---
+
+Mandatory: true
+Question: |
+  Please sign here:
+Subquestion: |
+  By signing your name, you affirm that everything you have stated is true.
+Signature: target_variable
+Under: |
+  ${ user }
+
+---
+Mandatory: true
+Question: |
+  Thank you.  We will get back to you shortly.
+Buttons:
+  Exit: exit
+---
